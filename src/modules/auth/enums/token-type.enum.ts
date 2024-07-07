@@ -1,6 +1,6 @@
 export enum TokenTypeEnum {
-  ACCESS = 'access',
-  REFRESH = 'refresh',
-  FORGOT = 'forgot',
-  VERIFY = 'verify',
+  ACCESS = 'ACCESS',
+  REFRESH = 'REFRESH',
+  FORGOT = 'FORGOT',
+  VERIFY = 'VERIFY',
 }

@@ -11,7 +11,6 @@ export class UserResDto extends PickType(BaseUserResDto, [
   'image',
   'role',
   'accountType',
-  'isFollowed',
   'isVerified',
   'isDeleted',
 ]) {}

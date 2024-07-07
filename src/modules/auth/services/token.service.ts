@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config/dist/config.service';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 import { Config, JWTConfig } from '../../../configs/config.type';
 import { TokenTypeEnum } from '../enums/token-type.enum';
 import { IJWTPayload } from '../interfaces/jwt-payload.interface';
+import { ITokenPair } from '../interfaces/token-pair.interface';
 
 @Injectable()
 export class TokenService {
   private readonly jwtConfig: JWTConfig;
 
   constructor(
-    private readonly configService: ConfigService<Config>,
     private readonly jwtService: JwtService,
-  ) {}
+    private readonly configService: ConfigService<Config>,
+  ) {
+    this.jwtConfig = configService.get<JWTConfig>('jwt');
+  }
 
-  public async generateTokens(payload: IJWTPayload) {
+  public async generateTokens(payload: IJWTPayload): Promise<ITokenPair> {
     const accessToken = await this.jwtService.signAsync(payload, {
-      secret: this.jwtConfig.accesSecret,
-      expiresIn: this.jwtConfig.accesExpiresIn,
+      secret: this.jwtConfig.accessSecret,
+      expiresIn: this.jwtConfig.accessExpiresIn,
     });
-
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: this.jwtConfig.refreshSecret,
       expiresIn: this.jwtConfig.refreshExpiresIn,
@@ -33,9 +35,12 @@ export class TokenService {
     token: string,
     type: TokenTypeEnum,
   ): Promise<IJWTPayload> {
-    return await this.jwtService.verifyAsync(token, {
-      secret: this.getSecret(type),
-    });
+    try {
+      const secret = this.getSecret(type);
+      return await this.jwtService.verifyAsync(token, { secret });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   public async generateActionToken(
@@ -64,10 +69,10 @@ export class TokenService {
   }
 
   private getSecret(type: TokenTypeEnum): string {
-    let secret;
+    let secret: string;
     switch (type) {
       case TokenTypeEnum.ACCESS: {
-        secret = this.jwtConfig.accesSecret;
+        secret = this.jwtConfig.accessSecret;
         break;
       }
       case TokenTypeEnum.REFRESH: {

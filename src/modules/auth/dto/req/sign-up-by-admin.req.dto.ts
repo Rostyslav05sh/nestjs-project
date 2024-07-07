@@ -1,8 +1,8 @@
 import { PickType } from '@nestjs/swagger';
 
-import { BaseAuthReqDto } from './base-auth-req.dto';
+import { BaseUserReqForAdminDto } from '../../../user/dto/req/base-user-req-for-admin.dto';
 
-export class SignUpReqDto extends PickType(BaseAuthReqDto, [
+export class SignUpByAdminReqDto extends PickType(BaseUserReqForAdminDto, [
   'name',
   'email',
   'password',

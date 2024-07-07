@@ -1,17 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsOptional, IsString, Length, Matches } from 'class-validator';
+import { IsEnum, IsOptional, IsString, Length, Matches } from 'class-validator';
 
 import { TransformHelper } from '../../../../common/helpers/transform.helper';
 import { AccountTypeEnum } from '../../../../database/entity/enums/accountType.enum';
-import { RoleEnum } from '../../../../database/entity/enums/role.enum';
+import { UsersRoleEnum } from '../../../../database/entity/enums/users-role.enum';
 
 export class BaseUserReqDto {
+  @IsOptional()
   @IsString()
   @Length(3, 50)
   @Transform(TransformHelper.trim)
   @Type(() => String)
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsString()
@@ -36,20 +37,17 @@ export class BaseUserReqDto {
   password: string;
 
   @ApiProperty({ example: '+380999999999' })
+  @IsOptional()
   @IsString()
   @Length(0, 300)
   @Matches(
     /^[\+]?3?[\s]?8?[\s]?\(?0\d{2}?\)?[\s]?\d{3}[\s|-]?\d{2}[\s|-]?\d{2}$/,
   )
-  phone: string;
-
-  @ApiProperty({
-    example: true,
-  })
-  public readonly isFollowed?: boolean;
+  phone?: string;
 
   @ApiProperty({ example: 'customer' })
-  role: RoleEnum;
+  @IsEnum(UsersRoleEnum)
+  role: UsersRoleEnum;
 
   @ApiProperty({ example: 'basic' })
   accountType: AccountTypeEnum;

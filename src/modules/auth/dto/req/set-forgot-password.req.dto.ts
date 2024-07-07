@@ -1,9 +1,7 @@
 import { PickType } from '@nestjs/swagger';
 
-import { BaseAuthReqDto } from './base-auth-req.dto';
+import { BaseUserReqDto } from '../../../user/dto/req/base-user-req.dto';
 
-export class ForgotPasswordReqDto extends PickType(BaseAuthReqDto, [
+export class SetForgotPasswordReqDto extends PickType(BaseUserReqDto, [
   'password',
-]) {
-  readonly confirmPassword: string;
-}
+]) {}

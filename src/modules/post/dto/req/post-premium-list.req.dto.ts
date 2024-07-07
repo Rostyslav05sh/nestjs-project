@@ -3,7 +3,7 @@ import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 import { TransformHelper } from '../../../../common/helpers/transform.helper';
 
-export class PostListReqDto {
+export class PostPremiumListReqDto {
   @IsOptional()
   @IsInt()
   @Min(1)
@@ -28,6 +28,12 @@ export class PostListReqDto {
   @Transform(TransformHelper.toLowerCase)
   @Transform(TransformHelper.trim)
   model?: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(TransformHelper.toLowerCase)
+  @Transform(TransformHelper.trim)
+  region?: string;
 
   @IsOptional()
   @IsString()

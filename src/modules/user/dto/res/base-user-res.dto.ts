@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { AccountTypeEnum } from '../../../../database/entity/enums/accountType.enum';
-import { RoleEnum } from '../../../../database/entity/enums/role.enum';
+import { UsersRoleEnum } from '../../../../database/entity/enums/users-role.enum';
 
 export class BaseUserResDto {
   @ApiProperty({
@@ -41,15 +41,10 @@ export class BaseUserResDto {
   public readonly image?: string;
 
   @ApiProperty({
-    description: 'If following true',
-  })
-  public readonly isFollowed?: boolean;
-
-  @ApiProperty({
     example: 'customer',
     description: 'The role of the User',
   })
-  public readonly role: RoleEnum;
+  public readonly role: UsersRoleEnum;
 
   @ApiProperty({
     example: 'basic',

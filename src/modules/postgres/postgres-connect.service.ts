@@ -20,10 +20,24 @@ export class PostgresConnectService implements TypeOrmOptionsFactory {
       password: dataBaseConfig.password,
       database: dataBaseConfig.dbName,
       entities: [
-        path.join(process.cwd(), 'src', 'database', 'entity', '*.entity.js'),
+        path.join(
+          process.cwd(),
+          'dist',
+          'src',
+          'database',
+          'entity',
+          '*.entity.js',
+        ),
       ],
       migrations: [
-        path.join(process.cwd(), 'src', 'database', 'migrations', '*.js'),
+        path.join(
+          process.cwd(),
+          'dist',
+          'src',
+          'database',
+          'migrations',
+          '*.js',
+        ),
       ],
       synchronize: false,
       migrationsRun: true,

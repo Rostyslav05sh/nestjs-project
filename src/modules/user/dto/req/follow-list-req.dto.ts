@@ -1,26 +1,25 @@
-import { Type } from 'class-transformer';
-import { IsIn, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+
+import { TransformHelper } from '../../../../common/helpers/transform.helper';
 
 export class FollowListReqDto {
   @IsOptional()
-  @Type(() => Number)
   @IsInt()
   @Min(1)
-  page?: number = 1;
-
-  @IsOptional()
+  @Max(100)
   @Type(() => Number)
-  @IsInt()
-  @Min(1)
   limit?: number = 10;
 
   @IsOptional()
-  @IsString()
-  @IsIn(['name', 'email', 'createdAt'])
-  sortBy?: string;
+  @IsInt()
+  @Min(0)
+  @Type(() => Number)
+  offset?: number = 0;
 
   @IsOptional()
   @IsString()
-  @IsIn(['ASC', 'DESC'])
-  sortOrder?: 'ASC' | 'DESC' = 'ASC';
+  @Transform(TransformHelper.toLowerCase)
+  @Transform(TransformHelper.trim)
+  search?: string;
 }

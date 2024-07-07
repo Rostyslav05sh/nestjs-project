@@ -9,4 +9,5 @@ export class BaseAuthReqDto extends PickType(BaseUserReqDto, [
   'phone',
   'bio',
   'image',
+  'role',
 ]) {}

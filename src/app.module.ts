@@ -6,9 +6,11 @@ import { GlobalExceptionFilter } from './common/http/global-exception.filter';
 import configuration from './configs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { LoggerModule } from './modules/logger/logger.module';
+import { PostModule } from './modules/post/post.module';
 import { PostgresModule } from './modules/postgres/postgres.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { RepositoryModule } from './modules/repository/repository.module';
+import { SendGridModule } from './modules/send-grid/send-grid.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -23,6 +25,8 @@ import { UserModule } from './modules/user/user.module';
     RepositoryModule,
     UserModule,
     AuthModule,
+    PostModule,
+    SendGridModule,
   ],
   controllers: [],
   providers: [

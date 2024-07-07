@@ -1,7 +1,5 @@
-export enum RoleEnum {
+export enum UsersRoleEnum {
   CUSTOMER = 'customer',
   SELLER = 'seller',
-  CARDEALERSHIPMANAGER = 'carDealershipManager',
-  MANAGER = 'manager',
-  ADMIN = 'admin',
+  CARDEALERSHIP = 'cardealership',
 }

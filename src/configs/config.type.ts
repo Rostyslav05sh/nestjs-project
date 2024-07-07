@@ -34,8 +34,8 @@ export type sentryConfig = {
 };
 
 export type JWTConfig = {
-  accesSecret: string;
-  accesExpiresIn: number;
+  accessSecret: string;
+  accessExpiresIn: number;
   refreshSecret: string;
   refreshExpiresIn: number;
   actionForgotSecret: string;
@@ -56,4 +56,5 @@ export type AWSConfig = {
 export type SendGridConfig = {
   apiKey: string;
   fromWhoEmail: string;
+  front_url: string;
 };

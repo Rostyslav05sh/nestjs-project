@@ -1,12 +1,10 @@
 import { UserResDto } from './user-res.dto';
 
 export class FollowListResDto {
-  followings: UserResDto[];
+  data: UserResDto[];
   meta: {
-    page: number;
-    limit: number;
     total: number;
-    sortBy: string;
-    sortOrder: string;
+    limit: number;
+    offset: number;
   };
 }

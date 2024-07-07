@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
+import { AccountTypeEnum } from '../../../database/entity/enums/accountType.enum';
 import { IUserData } from '../../auth/interfaces/user-data.interface';
 import { ContentTypeEnum } from '../../file-upload/models/enum/content-type.enum';
 import { FileUploadService } from '../../file-upload/services/file-upload.service';
@@ -50,6 +51,48 @@ export class UserService {
     const updatedUser = await this.userRepository.save({ ...user, ...dto });
 
     return UserMapper.toResponseDTO(updatedUser);
+  }
+  public async upgradeAccountType(userData: IUserData): Promise<void> {
+    const user = await this.userRepository.findOneBy({
+      id: userData.userId,
+      isDeleted: false,
+    });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    await this.userRepository.update(userData.userId, {
+      accountType: AccountTypeEnum.PREMIUM,
+    });
+  }
+
+  public async updateByAdministrator(
+    dto: UpdateUserReqDto,
+    userId: string,
+  ): Promise<UserResDto> {
+    const user = await this.userRepository.findOneBy({
+      id: userId,
+      isDeleted: false,
+    });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const updatedUser = await this.userRepository.save({ ...user, ...dto });
+
+    return UserMapper.toResponseDTO(updatedUser);
+  }
+
+  public async deleteByAdministrator(userId: string): Promise<void> {
+    const user = await this.userRepository.findOneBy({
+      id: userId,
+      isDeleted: false,
+    });
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    await this.userRepository.update(user.id, { isDeleted: true });
   }
 
   public async delete(userData: IUserData): Promise<void> {
@@ -131,12 +174,12 @@ export class UserService {
     userData: IUserData,
     query: FollowListReqDto,
   ): Promise<FollowListResDto> {
-    const [follows, total] = await this.followRepository.followList(
+    const [followers, total] = await this.userRepository.getList(
       userData,
       query,
     );
 
-    return UserMapper.toFollowListResponseDTO(follows, total, query);
+    return UserMapper.toFollowersListResponseDTO(followers, total, query);
   }
 
   public async uploadAvatar(

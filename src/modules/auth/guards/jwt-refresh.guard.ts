@@ -9,21 +9,20 @@ import { RefreshTokenRepository } from '../../repository/services/refresh-token.
 import { UserRepository } from '../../repository/services/user.repository';
 import { TokenTypeEnum } from '../enums/token-type.enum';
 import { AuthMapper } from '../services/auth.mapper';
-import { AuthCacheService } from '../services/auth-cache.service';
 import { TokenService } from '../services/token.service';
 
 @Injectable()
 export class JwtRefreshGuard implements CanActivate {
   constructor(
     private readonly tokenService: TokenService,
-    private readonly authCacheService: AuthCacheService,
     private readonly userRepository: UserRepository,
     private readonly refreshTokenRepository: RefreshTokenRepository,
   ) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-
     const refreshToken = request.get('Authorization')?.split('Bearer ')[1];
+
     if (!refreshToken) {
       throw new UnauthorizedException();
     }
@@ -32,13 +31,14 @@ export class JwtRefreshGuard implements CanActivate {
       refreshToken,
       TokenTypeEnum.REFRESH,
     );
+
     if (!payload) {
       throw new UnauthorizedException();
     }
 
-    const findTokenInRedis =
+    const isExist =
       await this.refreshTokenRepository.isRefreshTokenExist(refreshToken);
-    if (!findTokenInRedis) {
+    if (!isExist) {
       throw new UnauthorizedException();
     }
 
@@ -48,7 +48,6 @@ export class JwtRefreshGuard implements CanActivate {
     }
 
     request.user = AuthMapper.toUserDataDTO(user);
-
     return true;
   }
 }

@@ -60,6 +60,6 @@ export class FileUploadService {
     itemId: string,
     fileName: string,
   ): Promise<string> {
-    return `${type}/${itemId}/${randomUUID()}${path.extname(fileName)}`; // use only  template string
+    return `${type}/${itemId}/${randomUUID()}${path.extname(fileName)}`;
   }
 }

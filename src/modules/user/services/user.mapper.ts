@@ -1,4 +1,6 @@
 import { ConfigStaticService } from '../../../configs/config.static';
+import { AccountTypeEnum } from '../../../database/entity/enums/accountType.enum';
+import { UsersRoleEnum } from '../../../database/entity/enums/users-role.enum';
 import { UserEntity } from '../../../database/entity/user.entity';
 import { FollowListReqDto } from '../dto/req/follow-list-req.dto';
 import { FollowListResDto } from '../dto/res/follow-list-res.dto';
@@ -14,28 +16,24 @@ export class UserMapper {
       bio: user.bio,
       phone: user.phone,
       image: user.image ? `${awsConfig.bucketUrl}/${user.image}` : null,
-      role: user.role,
-      accountType: user.accountType,
-      isFollowed: user.following ? user.following.length > 0 : false,
-      isVerified: user.isVerified,
-      isDeleted: user.isDeleted,
+      role: user.role as UsersRoleEnum,
+      accountType: user.accountType || AccountTypeEnum.BASIC,
+      isVerified: user.isVerified || false,
+      isDeleted: user.isDeleted || false,
     };
   }
 
-  public static toFollowListResponseDTO(
-    follows: UserEntity[],
+  public static toFollowersListResponseDTO(
+    entity: UserEntity[],
     total: number,
-    dto: FollowListReqDto,
+    query: FollowListReqDto,
   ): FollowListResDto {
-    const followings = follows.map((follow) => this.toResponseDTO(follow));
     return {
-      followings,
+      data: entity.map(this.toResponseDTO),
       meta: {
-        page: dto.page,
-        limit: dto.limit,
         total,
-        sortBy: dto.sortBy,
-        sortOrder: dto.sortOrder,
+        offset: query.offset,
+        limit: query.limit,
       },
     };
   }

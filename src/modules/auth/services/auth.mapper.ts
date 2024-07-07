@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
+import { UserEntity } from '../../../database/entity/user.entity';
 import { UserMapper } from '../../user/services/user.mapper';
 import { AuthResDto } from '../dto/res/auth-res.dto';
 import { TokenResDto } from '../dto/res/token-res.dto';
 import { ITokenPair } from '../interfaces/token-pair.interface';
 import { IUserData } from '../interfaces/user-data.interface';
-import { UserEntity } from "../../../database/entity/user.entity";
 
 @Injectable()
 export class AuthMapper {
@@ -14,11 +14,11 @@ export class AuthMapper {
     tokens: ITokenPair,
   ): AuthResDto {
     return {
+      user: UserMapper.toResponseDTO(user),
       tokens: {
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
       },
-      user: UserMapper.toResponseDTO(user),
     };
   }
 

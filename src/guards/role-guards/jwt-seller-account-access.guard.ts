@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { AdministratorsRoleEnum } from '../database/entity/enums/administrators-role.enum';
-import { UsersRoleEnum } from '../database/entity/enums/users-role.enum';
-import { UserRepository } from '../modules/repository/services/user.repository';
+import { AdministratorsRoleEnum } from '../../database/entity/enums/administrators-role.enum';
+import { UsersRoleEnum } from '../../database/entity/enums/users-role.enum';
+import { UserRepository } from '../../modules/repository/services/user.repository';
 
 @Injectable()
 export class JwtSellerAccountAccessGuard implements CanActivate {

@@ -1,10 +1,10 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
 import { ActionTokenEntity } from './action-token.entity';
-import { CommentEntity } from './comment.entity';
 import { AccountTypeEnum } from './enums/accountType.enum';
-import { RoleEnum } from './enums/role.enum';
+import { AdministratorsRoleEnum } from './enums/administrators-role.enum';
 import { TableNameEnum } from './enums/table-name.enum';
+import { UsersRoleEnum } from './enums/users-role.enum';
 import { FollowEntity } from './follow.entity';
 import { LikeEntity } from './like.entity';
 import { BaseModel } from './models/base.model';
@@ -31,17 +31,28 @@ export class UserEntity extends BaseModel {
   @Column('text')
   phone: string;
 
-  @Column({ type: 'enum', enum: RoleEnum })
-  role: RoleEnum;
+  @Column({
+    type: 'enum',
+    enum: [
+      ...Object.values(UsersRoleEnum),
+      ...Object.values(AdministratorsRoleEnum),
+    ],
+    default: UsersRoleEnum.CUSTOMER,
+  })
+  role: UsersRoleEnum | AdministratorsRoleEnum = UsersRoleEnum.CUSTOMER;
 
-  @Column({ type: 'enum', enum: AccountTypeEnum })
-  accountType: AccountTypeEnum;
+  @Column({
+    type: 'enum',
+    enum: AccountTypeEnum,
+    default: AccountTypeEnum.BASIC,
+  })
+  accountType: AccountTypeEnum = AccountTypeEnum.BASIC;
 
-  @Column('boolean')
-  isDeleted: boolean;
+  @Column({ type: 'boolean', default: false })
+  isDeleted: boolean = false;
 
-  @Column('boolean')
-  isVerified: boolean;
+  @Column({ type: 'boolean', default: false })
+  isVerified: boolean = false;
 
   @OneToMany(() => PostEntity, (entity) => entity.user)
   posts?: PostEntity[];
@@ -55,11 +66,8 @@ export class UserEntity extends BaseModel {
   @OneToMany(() => LikeEntity, (entity) => entity.user)
   likes?: LikeEntity[];
 
-  @OneToMany(() => CommentEntity, (entity) => entity.user)
-  comments?: CommentEntity[];
-
   @OneToMany(() => FollowEntity, (entity) => entity.follower)
-  followers?: FollowEntity[];
+  follower?: FollowEntity[];
 
   @OneToMany(() => FollowEntity, (entity) => entity.following)
   following?: FollowEntity[];

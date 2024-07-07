@@ -30,14 +30,14 @@ export class JwtAccessGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const accesToken = request.get('Authorization')?.split('Bearer ')[1];
+    const accessToken = request.get('Authorization')?.split('Bearer ')[1];
 
-    if (!accesToken) {
+    if (!accessToken) {
       throw new UnauthorizedException();
     }
 
     const payload = await this.tokenService.verifyToken(
-      accesToken,
+      accessToken,
       TokenTypeEnum.ACCESS,
     );
 
@@ -46,7 +46,7 @@ export class JwtAccessGuard implements CanActivate {
     }
 
     const findTokenInRedis = await this.authCacheService.isAccessTokenExist(
-      accesToken,
+      accessToken,
       payload.userId,
     );
     if (!findTokenInRedis) {

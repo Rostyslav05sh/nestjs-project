@@ -4,9 +4,9 @@ import { IsEnum, IsOptional, IsString, Length, Matches } from 'class-validator';
 
 import { TransformHelper } from '../../../../common/helpers/transform.helper';
 import { AccountTypeEnum } from '../../../../database/entity/enums/accountType.enum';
-import { UsersRoleEnum } from '../../../../database/entity/enums/users-role.enum';
+import { AdministratorsRoleEnum } from '../../../../database/entity/enums/administrators-role.enum';
 
-export class BaseUserReqDto {
+export class BaseUserReqForAdminDto {
   @IsOptional()
   @IsString()
   @Length(3, 50)
@@ -45,14 +45,9 @@ export class BaseUserReqDto {
   )
   phone?: string;
 
-  @ApiProperty({
-    example: true,
-  })
-  public readonly isFollowed?: boolean;
-
-  @ApiProperty({ example: 'customer' })
-  @IsEnum(UsersRoleEnum)
-  role: UsersRoleEnum;
+  @ApiProperty({ example: 'admin' })
+  @IsEnum(AdministratorsRoleEnum)
+  role: AdministratorsRoleEnum;
 
   @ApiProperty({ example: 'basic' })
   accountType: AccountTypeEnum;

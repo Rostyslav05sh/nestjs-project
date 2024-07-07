@@ -19,7 +19,7 @@ export class AuthCacheService {
 
     await this.redisService.deleteByKey(key);
     await this.redisService.addOneToSet(key, token);
-    await this.redisService.expire(key, this.jwtConfig.accesExpiresIn);
+    await this.redisService.expire(key, this.jwtConfig.accessExpiresIn);
   }
 
   public async isAccessTokenExist(
